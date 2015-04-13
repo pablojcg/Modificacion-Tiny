@@ -34,10 +34,10 @@ import java_cup.runtime.*;
 
 
 digito		= [0-9]
-numero		= {digito}+
-letra			= [a-zA-Z]
+numero		= {digito}+ | -?[0-9]+
+letra		= [a-zA-Z]
 identificador	= {letra}+
-nuevalinea		= \n | \n\r | \r\n
+nuevalinea	= \n | \n\r | \r\n
 espacio		= [ \t]+
 %%
 "if"            {	if(debug) System.out.println("token IF");
@@ -64,6 +64,19 @@ espacio		= [ \t]+
 "write"         {	if(debug) System.out.println("token WRITE");
 			return sf.newSymbol("WRITE",sym.WRITE);
 			}
+"for"         {         if(debug) System.out.println("token FOR");
+			return sf.newSymbol("FOR",sym.FOR);
+			}
+//Opreradores Lógico
+"and"           {       if(debug) System.out.println("token AND");
+                        return sf.newSymbol("AND",sym.AND);
+                        }
+"not"           {       if(debug) System.out.println("token NOT");
+                        return sf.newSymbol("NOT",sym.NOT);
+                        }
+"or"            {       if(debug) System.out.println("token OR");
+                        return sf.newSymbol("OR",sym.OR);
+                        }
 ":="            {	if(debug) System.out.println("token ASSIGN");
 			return sf.newSymbol("ASSIGN",sym.ASSIGN);
 			}
@@ -73,6 +86,18 @@ espacio		= [ \t]+
 "<"             {	if(debug) System.out.println("token LT");
 			return sf.newSymbol("LT",sym.LT);
 			}
+"!="            {       if(debug) System.out.println("token NEQ");
+                        return sf.newSymbol("NEQ",sym.NEQ);
+                        }
+">"             {       if(debug) System.out.println("token GRT");
+                        return sf.newSymbol("GRT",sym.GRT);
+                        }
+">="            {       if(debug) System.out.println("token GRTEQ");
+                        return sf.newSymbol("GRTEQ",sym.GRTEQ);
+                        }
+"<="            {       if(debug) System.out.println("token LTEQ");
+                        return sf.newSymbol("LTEQ",sym.LTEQ);
+                        }
 "+"             {	if(debug) System.out.println("token PLUS");
 			return sf.newSymbol("PLUS",sym.PLUS);
 			}
@@ -98,7 +123,7 @@ espacio		= [ \t]+
 			return sf.newSymbol("NUM",sym.NUM,new Integer(yytext()));
 			}
 {identificador}	{	if(debug) System.out.println("token ID");
-				return sf.newSymbol("ID",sym.ID,new String(yytext()));
+			return sf.newSymbol("ID",sym.ID,new String(yytext()));
 			}
 {nuevalinea}       {lineanum++;}
 {espacio}    { /* saltos espacios en blanco*/}
