@@ -50,6 +50,7 @@ terminal OR;
 non terminal program;
 non terminal NodoBase stmt_seq;
 non terminal NodoBase stmt;
+non terminal NodoBase for_stmt;
 non terminal NodoBase if_stmt;
 non terminal NodoBase repeat_stmt;
 non terminal NodoBase assign_stmt;
@@ -104,6 +105,11 @@ stmt        ::= if_stmt:sif	{: if(modoDepuracion) System.out.println("\t regla 3
             | write_stmt:sesc	{: if(modoDepuracion) System.out.println("\t regla 3e");
 					RESULT=sesc;
 					:}
+            | for_stmt:for      {: if(modoDepuracion) System.out.println("\t regla 3f");
+					RESULT=sfor;
+					:}
+
+
             | error	{: if(modoDepuracion) System.out.println("\t regla 3f");
 				System.out.println("Ocurrio error en cup # 0004");
 				RESULT=null;
@@ -152,6 +158,11 @@ write_stmt  ::= WRITE exp:ex	{: if(modoDepuracion) System.out.println("\t regla 
 					RESULT= new NodoEscribir(ex);
 					:}
 		;
+
+for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf DPAREN THEN stmt_seq:seq1 END
+                                 {: if(modoDepuracion) System.out.println("\t regla 13a");
+					RESULT= new NodoFor(exp,exb,exf,seq1);
+					:}
 
 exp         ::= simple_exp:exI LT simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9a");
 								RESULT = new NodoOperacion(exI,tipoOp.menor,exD);
