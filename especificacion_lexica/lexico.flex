@@ -67,6 +67,14 @@ espacio		= [ \t]+
 "for"         {         if(debug) System.out.println("token FOR");
 			return sf.newSymbol("FOR",sym.FOR);
 			}
+
+"int"         {         if(debug) System.out.println("token INT");
+			return sf.newSymbol("INT",sym.INT);
+			}
+
+"bool"         {         if(debug) System.out.println("token BOOL");
+			return sf.newSymbol("BOOL",sym.BOOL);
+			}
 //Opreradores Lógico
 "and"           {       if(debug) System.out.println("token AND");
                         return sf.newSymbol("AND",sym.AND);
