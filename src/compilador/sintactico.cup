@@ -44,7 +44,8 @@ terminal LTEQ;
 terminal NOT;
 terminal AND;
 terminal OR;
-
+terminal COMA;
+terminal EXPBOOL;
 
 /* Simbolos No Terminales */
 non terminal program;
@@ -60,6 +61,9 @@ non terminal NodoBase exp;
 non terminal NodoBase simple_exp;
 non terminal NodoBase term;
 non terminal NodoBase factor;
+non terminal NodoBase tipo;
+non terminal NodoBase tipo_var;
+non terminal NodoBase arg;
 
 /* Precedencia de operadores */
 precedence left PLUS;
@@ -105,7 +109,7 @@ stmt        ::= if_stmt:sif	{: if(modoDepuracion) System.out.println("\t regla 3
             | write_stmt:sesc	{: if(modoDepuracion) System.out.println("\t regla 3e");
 					RESULT=sesc;
 					:}
-            | for_stmt:for      {: if(modoDepuracion) System.out.println("\t regla 3f");
+            | for_stmt:sfor      {: if(modoDepuracion) System.out.println("\t regla 3f");
 					RESULT=sfor;
 					:}
 
@@ -128,6 +132,30 @@ repeat_stmt ::= REPEAT stmt_seq:cuerpo UNTIL exp:prueba	{: if(modoDepuracion) Sy
 							RESULT = new NodoRepeat(cuerpo,prueba);
 							:}
 		;
+
+ tipo       ::= tipo_var:tipo                           {: if(modoDepuracion) System.out.println("\t regla 14");
+							RESULT = tipo;
+							:}
+		;
+
+ tipo_var ::= INT arg:ex SEMI	                        {: if(modoDepuracion) System.out.println("\t regla 14a");
+							RESULT = ex;
+							:}  
+                
+                | BOOL arg:ex SEMI                      {: if(modoDepuracion) System.out.println("\t regla 14b");
+							RESULT = ex;
+							:}
+             
+		;
+
+  arg     ::= exp:ex COMA arg:ar 	                {: if(modoDepuracion) System.out.println("\t regla 14a");
+							RESULT = new NodoArg(ex,ar);
+							:}
+           | exp:ex                                     {: if(modoDepuracion) System.out.println("\t regla 14a");
+							RESULT = ex;
+							:}
+                ;
+
 
 assign_stmt ::= ID:variable 	{: if(modoDepuracion) System.out.println("\t regla 6 parte del medio");
 				/*lineanum=1000; //Pasar/Obtener la linea correcta por el Simbolo
@@ -161,7 +189,7 @@ write_stmt  ::= WRITE exp:ex	{: if(modoDepuracion) System.out.println("\t regla 
 
 for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf DPAREN THEN stmt_seq:seq1 END
                                  {: if(modoDepuracion) System.out.println("\t regla 13a");
-					RESULT= new NodoFor(exp,exb,exf,seq1);
+					RESULT= new NodoFor(ex,exb,exf,seq1);
 					:}
 
 exp         ::= simple_exp:exI LT simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9a");
@@ -218,8 +246,20 @@ factor      ::= LPAREN exp:ex RPAREN	{: if(modoDepuracion) System.out.println("\
 						System.out.println("Ocurrio error en cup # 0005");
 					}
 					:}
+                | EXPBOOL:expb   {: if(modoDepuracion) System.out.println("\t regla 12b");
+					System.out.println("Devolvi nodo valor booleano");
+					if(expb!=null){
+						RESULT= new NodoBool((Boolean)expb);
+					}else{
+						RESULT = null;
+						System.out.println("Ocurrio error en cup # 0005");
+					}
+					:}
+
 		| error	{: if(modoDepuracion) System.out.println("\t regla 12d");
 				System.out.println("Ocurrio error en cup # 0003");
 				RESULT=null;
 				:}
+
+                                    
 		;
