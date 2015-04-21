@@ -44,8 +44,6 @@ terminal LTEQ;
 terminal NOT;
 terminal AND;
 terminal OR;
-terminal INT;
-terminal BOOL;
 
 
 /* Simbolos No Terminales */
@@ -161,10 +159,10 @@ write_stmt  ::= WRITE exp:ex	{: if(modoDepuracion) System.out.println("\t regla 
 					:}
 		;
 
-for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf RPAREN THEN stmt_seq:seq1 END
+for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf DPAREN THEN stmt_seq:seq1 END
                                  {: if(modoDepuracion) System.out.println("\t regla 13a");
 					RESULT= new NodoFor(exp,exb,exf,seq1);
-					:};
+					:}
 
 exp         ::= simple_exp:exI LT simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9a");
 								RESULT = new NodoOperacion(exI,tipoOp.menor,exD);

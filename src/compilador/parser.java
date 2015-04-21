@@ -449,7 +449,7 @@ class CUP$parser$actions {
 		int seq1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		NodoBase seq1 = (NodoBase)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 if(modoDepuracion) System.out.println("\t regla 13a");
-					RESULT= new NodoFor(exp,exb,exf,seq1);
+					RESULT= new NodoFor(ex,exb,exf,seq1);
 					
               CUP$parser$result = parser.getSymbolFactory().newSymbol("for_stmt",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
