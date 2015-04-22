@@ -41,11 +41,12 @@ terminal NEQ;
 terminal GRT;
 terminal GRTEQ;
 terminal LTEQ;
-terminal NOT;
 terminal AND;
 terminal OR;
 terminal COMA;
 terminal EXPBOOL;
+terminal INT;
+terminal BOOL;
 
 /* Simbolos No Terminales */
 non terminal program;
@@ -112,8 +113,9 @@ stmt        ::= if_stmt:sif	{: if(modoDepuracion) System.out.println("\t regla 3
             | for_stmt:sfor      {: if(modoDepuracion) System.out.println("\t regla 3f");
 					RESULT=sfor;
 					:}
-
-
+             | tipo:st      {: if(modoDepuracion) System.out.println("\t regla 3g");
+					RESULT=st;
+					:}                           
             | error	{: if(modoDepuracion) System.out.println("\t regla 3f");
 				System.out.println("Ocurrio error en cup # 0004");
 				RESULT=null;
@@ -187,20 +189,32 @@ write_stmt  ::= WRITE exp:ex	{: if(modoDepuracion) System.out.println("\t regla 
 					:}
 		;
 
-for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf DPAREN THEN stmt_seq:seq1 END
+for_stmt    ::= FOR LPAREN exp:ex SEMI exp:exb SEMI  exp:exf RPAREN THEN stmt_seq:seq1 END
                                  {: if(modoDepuracion) System.out.println("\t regla 13a");
 					RESULT= new NodoFor(ex,exb,exf,seq1);
 					:}
-
+              ;
 exp         ::= simple_exp:exI LT simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9a");
-								RESULT = new NodoOperacion(exI,tipoOp.menor,exD);
-								:}
-		| simple_exp:exI EQ simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9b");
+							RESULT = new NodoOperacion(exI,tipoOp.menor,exD);
+							:}
+                | simple_exp:exI GRT simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9b");
+							RESULT = new NodoOperacion(exI,tipoOp.mayor,exD);
+							:}
+                | simple_exp:exI LTEQ simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9c");
+							RESULT = new NodoOperacion(exI,tipoOp.menorigual,exD);
+							:}
+                | simple_exp:exI GRTEQ simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9d");
+							RESULT = new NodoOperacion(exI,tipoOp.mayorigual,exD);
+							:}
+		| simple_exp:exI EQ simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9e");
 							RESULT = new NodoOperacion(exI,tipoOp.igual,exD);
+							:}
+                | simple_exp:exI NEQ simple_exp:exD	{: if(modoDepuracion) System.out.println("\t regla 9e");
+							RESULT = new NodoOperacion(exI,tipoOp.diferente,exD);
 							:}
 		| simple_exp:ex	{: if(modoDepuracion) System.out.println("\t regla 9c");
 					RESULT = ex;
-					:}
+					:}                
 		;
 
 simple_exp  ::= simple_exp:exI PLUS term:exD	{: if(modoDepuracion) System.out.println("\t regla 10a");

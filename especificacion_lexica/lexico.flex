@@ -85,9 +85,6 @@ expb            = [true]|[false]
 "and"           {       if(debug) System.out.println("token AND");
                         return sf.newSymbol("AND",sym.AND);
                         }
-"not"           {       if(debug) System.out.println("token NOT");
-                        return sf.newSymbol("NOT",sym.NOT);
-                        }
 "or"            {       if(debug) System.out.println("token OR");
                         return sf.newSymbol("OR",sym.OR);
                         }
